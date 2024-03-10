@@ -1,30 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
+
 
 import "./style.scss";
 
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
-  );
-  const nextCard = () => {
-    setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
-      5000
-    );
-  };
+  const byDateDesc = data?.focus?.sort((evtA, evtB) =>
+  new Date(evtA.date) - new Date(evtB.date));
+  
+  let intervalId;
+
   useEffect(() => {
-    nextCard();
-  });
+    if (byDateDesc) {
+      clearInterval(intervalId); 
+      intervalId = setInterval(() => {
+        setIndex(prevIndex => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
+      }, 5000);
+    }
+  
+    return () => clearInterval(intervalId);
+  }, [byDateDesc]); 
+  
+
+  const handleIndexChange = useCallback((radioIdx) => {
+    clearInterval(intervalId);
+    setIndex(radioIdx);
+    setTimeout(() => {
+      intervalId = setInterval(() => {
+        setIndex(prevIndex => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
+      }, 5000);
+    }); 
+  }, [byDateDesc]);
+  
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
-        <>
           <div
-            key={event.title}
+            key={event.id} 
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
             }`}
@@ -37,21 +53,21 @@ const Slider = () => {
                 <div>{getMonth(new Date(event.date))}</div>
               </div>
             </div>
-          </div>
-          <div className="SlideCard__paginationContainer">
+          </div>  
+      ))}
+       <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((_, radioIdx) => (
+              {byDateDesc?.map((event, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  key={event.id}
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked={index === radioIdx}
+                  onChange={() => handleIndexChange(radioIdx)}
                 />
               ))}
             </div>
           </div>
-        </>
-      ))}
     </div>
   );
 };
