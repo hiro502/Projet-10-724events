@@ -21,17 +21,18 @@ export const DataProvider = ({ children }) => {
   const [data, setData] = useState(null);
   const getData = useCallback(async () => {
     try {
-      
       setData(await api.loadData());
     } catch (err) {
       setError(err);
     }
-  }, []);
+  }, [api.loadData]);
   useEffect(() => {
     if (data) return;
     getData();
-  });
-  
+  }, [data]);
+  // Fournit un deuxième argument à useCallback et useEffect
+
+
   return (
     <DataContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values

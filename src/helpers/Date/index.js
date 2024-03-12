@@ -13,5 +13,6 @@ export const MONTHS = {
   11: "décembre",
 };
 
+// corrige les propriétés
 
 export const getMonth = (date) => MONTHS[date.getMonth()];

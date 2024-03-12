@@ -14,6 +14,7 @@ import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
   
+  // Sélectionner le dernier événement
   const lastEvent = (() => {
     const {data} = useData()
     if (!data || !data.events || data.events.length === 0) {
@@ -64,7 +65,8 @@ const Page = () => {
           </ServiceCard>
         </div>
       </section>
-      <section className="EventsContainer" id="nos-realisations">
+      <section className="EventsContainer" id="nos-realisations"> 
+      {/* Ajout d'un ID pour le lien interne de la page  */}
         <h2 className="Title">Nos réalisations</h2>
         <EventList />
       </section>
@@ -129,6 +131,7 @@ const Page = () => {
     <footer className="row">
       <div className="col presta">
         <h3>Notre derniére prestation</h3>
+        {/* Afficher un texte si aucun événement n'est disponible */}
         {lastEvent ? (
       <EventCard
         imageSrc={lastEvent.cover}
