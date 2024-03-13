@@ -9,8 +9,7 @@ const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
   const byDateDesc = data?.focus?.sort((evtA, evtB) =>
-  new Date(evtA.date) - new Date(evtB.date));
-  
+  new Date(evtA.date) - new Date(evtB.date)); // Trier les événements par ordre 
   let intervalId;
 
   useEffect(() => {
@@ -18,7 +17,7 @@ const Slider = () => {
       clearInterval(intervalId); 
       intervalId = setInterval(() => {
         setIndex(prevIndex => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
-      }, 5000);
+      }, 5000);  // Modifié pour　ne pas affichier d'une page blanche
     }
   
     return () => clearInterval(intervalId);
@@ -33,7 +32,7 @@ const Slider = () => {
         setIndex(prevIndex => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
       }, 5000);
     }); 
-  }, [byDateDesc]);
+  }, [byDateDesc]);  // Ajout de la fonctionnalité permettant à l'utilisateur de choisir une photo à volonté
   
 
   return (
