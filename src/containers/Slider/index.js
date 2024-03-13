@@ -17,8 +17,9 @@ const Slider = () => {
       clearInterval(intervalId); 
       intervalId = setInterval(() => {
         setIndex(prevIndex => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
-      }, 5000);  // Modifié pour　ne pas affichier d'une page blanche
+      }, 5000); // Modifié pour ne pas affichier d'une page blanche
     }
+   
   
     return () => clearInterval(intervalId);
   }, [byDateDesc]); 
